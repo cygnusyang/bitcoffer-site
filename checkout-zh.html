@@ -48,10 +48,11 @@
   <p class="price">US$9.99<span>／年，按年续费</span></p>
   <p>这是直装版（非 App Store 版）的年度授权。付款由 Paddle 处理，它是本交易的卖方：销售税／增值税由 Paddle 计算并申报，付款前会显示含税总价。</p>
   <div class="field">
-    <label for="fingerprint">机器指纹 <span>—— 选填，填了付款即出序列号</span></label>
+    <label for="fingerprint">机器指纹 <span>—— 必填，付款后序列号直接寄到邮箱</span></label>
     <input id="fingerprint" type="text" inputmode="latin" autocomplete="off" autocapitalize="off"
-           spellcheck="false" maxlength="32" placeholder="32 位字符，例如 6f1c…">
-    <p>在 Bitcoffer 里打开<strong>设置 → 许可 → 机器指纹</strong>，点<strong>复制</strong>粘到这里。不填也行：付款后我们会寄一封领取链接，把指纹粘进去，序列号立刻显示。</p>
+           spellcheck="false" maxlength="32" aria-required="true" aria-describedby="fingerprint-help"
+           placeholder="32 位字符，例如 6f1c…">
+    <p id="fingerprint-help">在 Bitcoffer 里打开<strong>设置 → 许可 → 机器指纹</strong>，点<strong>复制</strong>粘到这里。指纹只存在于你要运行 Bitcoffer 的那台 Mac 上，还没装的话请先<a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">下载安装</a>。</p>
   </div>
   <p><button class="button" id="buy" type="button" disabled>前往 Paddle 结账</button></p>
   <p id="checkout-status" role="status">正在加载结账…</p>
@@ -61,9 +62,9 @@
 <h2>付款之后</h2>
 <ol>
   <li>Paddle 会发一封带交易编号的收据到你填写的邮箱。</li>
-  <li>上面填了指纹的：绑定这台 Mac 的序列号一分钟内寄到付款邮箱。</li>
-  <li>没填指纹的：我们会寄一封领取链接，把「设置 → 许可 → 机器指纹」里的指纹粘进去，序列号立刻显示。</li>
-  <li>打开 Bitcoffer →「设置」→「许可」→ 粘贴序列号 →「激活」。一张订单可激活两台 Mac，第二台用同一封邮件里的链接领取。</li>
+  <li>绑定这台 Mac 的序列号一分钟内寄到付款邮箱。</li>
+  <li>打开 Bitcoffer →「设置」→「许可」→ 粘贴序列号 →「激活」。</li>
+  <li>一张订单可激活两台 Mac。第二台在新机器上复制指纹，到<a href="claim-zh">领取页</a>换取那一台的序列号（重装系统也在那里取回）。</li>
 </ol>
 <p>没收到？先翻一遍垃圾邮件，再用付款邮箱到<a href="claim-zh">领取页</a>重取，或直接写信到 <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence%20delivery">ruohuyang@163.com</a>。</p>
 <p>不着急的话，可以先用 <a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">30 天免费试用</a>；<a href="https://apps.apple.com/cn/app/id6829253572?mt=12">Mac App Store 版</a>则走 Apple 的内购订阅。</p>
@@ -73,7 +74,7 @@
 <h2 lang="en">English</h2>
 <div lang="en">
   <p>This page sells the annual direct-download licence (US$9.99/year, two Macs). Payment is handled by Paddle, the seller of record; taxes are calculated and remitted by Paddle and the final total is shown before you pay.</p>
-  <p>After paying, the device-bound serial is emailed within a minute if you filled in the fingerprint above; otherwise we email a one-click claim link where the fingerprint is exchanged for a serial. The <a href="checkout">English checkout page</a> has the same steps.</p>
+  <p>After paying, the device-bound serial is emailed to the address you paid with within a minute. The machine fingerprint is required: it decides which Mac the serial is bound to, so the field cannot be skipped. The <a href="checkout">English checkout page</a> has the same steps.</p>
 </div>
 
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js" defer></script>

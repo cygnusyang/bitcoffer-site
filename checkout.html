@@ -49,10 +49,11 @@
   <p class="price">US$9.99<span> / year, renews annually</span></p>
   <p>An annual licence for the direct download of Bitcoffer. Payment is handled by Paddle, who is the seller of record: they work out and remit any sales tax or VAT, and the final total is shown before you pay.</p>
   <div class="field">
-    <label for="fingerprint">Machine fingerprint <span>— optional, gets your serial the moment you pay</span></label>
+    <label for="fingerprint">Machine fingerprint <span>— required, so your serial can be emailed the moment you pay</span></label>
     <input id="fingerprint" type="text" inputmode="latin" autocomplete="off" autocapitalize="off"
-           spellcheck="false" maxlength="32" placeholder="32 characters, e.g. 6f1c…">
-    <p>In Bitcoffer open <strong>Settings → Licence → Machine fingerprint</strong> and press <strong>Copy</strong>. Leave it blank and we will email you a link: paste the fingerprint there and the serial appears immediately.</p>
+           spellcheck="false" maxlength="32" aria-required="true" aria-describedby="fingerprint-help"
+           placeholder="32 characters, e.g. 6f1c…">
+    <p id="fingerprint-help">In Bitcoffer open <strong>Settings → Licence → Machine fingerprint</strong> and press <strong>Copy</strong>, then paste it here. The fingerprint only exists on the Mac you will run Bitcoffer on, so <a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">download and open the app</a> first if you have not installed it yet.</p>
   </div>
   <p><button class="button" id="buy" type="button" disabled>Continue to Paddle checkout</button></p>
   <p id="checkout-status" role="status">Loading checkout…</p>
@@ -62,9 +63,9 @@
 <h2>What happens after you pay</h2>
 <ol>
   <li>Paddle emails you a receipt with a transaction ID.</li>
-  <li>If you filled in the fingerprint above, your device-bound serial arrives by email within a minute.</li>
-  <li>If you left it blank, we email you a one-click link instead: paste the fingerprint from Bitcoffer → Settings → Licence, and the serial appears right there.</li>
-  <li>Open Bitcoffer → Settings → Licence, paste the serial, press Activate. One order covers two Macs; the same link issues a serial for a second Mac.</li>
+  <li>Your device-bound serial arrives within a minute, sent to the address you paid with.</li>
+  <li>Open Bitcoffer → Settings → Licence, paste the serial, press Activate.</li>
+  <li>One order covers two Macs. On a second Mac copy its fingerprint and open the <a href="claim">claim page</a>; it issues that machine's serial and also re-issues the first one after a reinstall.</li>
 </ol>
 <p>Nothing arrives? Check the spam folder, then use the <a href="claim">claim page</a> with your Paddle email, or write to <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence%20delivery">ruohuyang@163.com</a> from the address you paid with.</p>
 <p>Not in a hurry? The <a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">30-day trial</a> covers the direct download in full, and the <a href="https://apps.apple.com/app/id6829253572?mt=12">Mac App Store</a> version subscribes through Apple instead.</p>
@@ -74,8 +75,8 @@
 <h2 lang="zh-Hans">中文说明</h2>
 <div lang="zh-Hans">
   <p>直装版按年授权：US$9.99／年，可激活两台 Mac。付款由 Paddle 处理（Paddle 是交易卖方，负责计算并申报销售税／增值税，付款前会显示含税总价）。</p>
-  <p>付款后：Paddle 会给你一封带交易编号的收据。上面填了机器指纹的，序列号一分钟内寄到付款邮箱；没填的，我们会寄一封「领取」邮件，把在「设置 → 许可 → 机器指纹」里复制的指纹粘进去，序列号立刻显示。</p>
-  <p>拿到序列号后：打开 Bitcoffer → 设置 → 许可 → 粘贴 → 激活。一张订单可激活两台 Mac，第二台用同一封邮件里的链接领取即可。</p>
+  <p>付款后：Paddle 会给你一封带交易编号的收据。机器指纹是必填项——它决定序列号绑在哪台 Mac 上，所以这一项不能跳过。序列号一分钟内寄到付款邮箱。</p>
+  <p>拿到序列号后：打开 Bitcoffer → 设置 → 许可 → 粘贴 → 激活。一张订单可激活两台 Mac；第二台在新机器上复制指纹，到<a href="claim-zh">领取页</a>换取那一台的序列号（重装系统同样在那里取回）。</p>
   <p>不着急的话，<a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">直装版</a>可以先免费试用 30 天；<a href="https://apps.apple.com/cn/app/id6829253572?mt=12">Mac App Store 版</a>走 Apple 的内购订阅。</p>
 </div>
 
