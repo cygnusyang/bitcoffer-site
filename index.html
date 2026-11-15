@@ -44,7 +44,13 @@
       "@type": "Offer",
       "price": "9.99",
       "priceCurrency": "USD",
-      "description": "Annual subscription. The direct download includes a 30-day free trial."
+      "description": "Auto-renewable annual subscription, bought as an in-app purchase in the Mac App Store build. Billing is handled by Apple; a one-month introductory free trial is available."
+    },
+    {
+      "@type": "Offer",
+      "price": "9.99",
+      "priceCurrency": "USD",
+      "description": "Device-bound annual serial licence for the direct download. The direct download includes a 30-day free trial."
     }
   ]
 }
@@ -69,16 +75,18 @@
       <p class="price">US$9.99<span> / year</span></p>
       <p>Encrypted local vaults for passwords and keys, Touch ID unlock, and tools to use credentials with AI agents.</p>
       <div class="actions">
-        <a class="button" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="pricing">Download for a free trial</a>
-        <a class="button secondary" href="mailto:ruohuyang@163.com?subject=Bitcoffer%20License">Ask about a subscription</a>
+        <a class="button" href="https://apps.apple.com/app/id6829253572?mt=12" data-track="buy_click" data-track-page="pricing">Subscribe on the Mac App Store</a>
+        <a class="button secondary" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="pricing">Download the free trial</a>
       </div>
-      <p class="pricing-links"><a href="https://ai.cygnusyang.top/terms">Terms</a> · <a href="privacy">Privacy policy</a></p>
+      <p class="pricing-note">Billed by Apple; cancel any time under Apple&nbsp;ID → Subscriptions.</p>
+      <p class="pricing-links"><a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20direct%20licence">Direct-download licence</a> · <a href="https://ai.cygnusyang.top/terms">Terms</a> · <a href="privacy">Privacy policy</a></p>
     </article>
   </div>
   <div class="pricing-faq">
-    <details><summary>How do I start the free trial?</summary><p>The direct-download trial starts when you first open Bitcoffer. Eligible Mac App Store customers can start a one-month trial through the in-app subscription.</p></details>
+    <details><summary>How do I start the free trial?</summary><p>Install from the Mac App Store and start the one-month introductory trial from the subscription screen inside the app. The direct download starts its 30-day trial the first time you open Bitcoffer.</p></details>
+    <details><summary>How do I subscribe?</summary><p>Open the Mac App Store build of Bitcoffer and choose Subscribe — US$9.99 per year, charged by Apple to the Apple&nbsp;ID you are signed in with. If you would rather buy outside the App Store, ask for a device-bound serial licence for the direct download.</p></details>
     <details><summary>What happens when the trial ends?</summary><p>Without an active subscription or licence, Bitcoffer switches to read-only mode. You can still open, view and export your vault.</p></details>
-    <details><summary>How do I subscribe?</summary><p>For the direct download, <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20License">contact us</a> to get a serial licence. For the Mac App Store version, manage your subscription in the app.</p></details>
+    <details><summary>How do I cancel?</summary><p>Subscriptions belong to your Apple&nbsp;ID: cancel in System Settings → Apple&nbsp;ID → Media &amp; Purchases → Subscriptions, or from the Manage Subscription link in the app. It stays active until the end of the paid period.</p></details>
   </div>
 </section>
 <section class="content wrap"><div class="install"><div><strong>Install with Homebrew</strong><p>One command — or grab the DMG from Releases. Builds are signed and notarized by Apple.</p></div><code>brew install --cask cygnusyang/bitcoffer/bitcoffer</code></div></section></main>

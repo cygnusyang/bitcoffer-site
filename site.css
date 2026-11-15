@@ -49,8 +49,14 @@ section.pricing {
   text-align: center;
 }
 
-.pricing .pricing-links {
+.pricing .pricing-note {
   margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pricing .pricing-links {
+  margin: 6px 0 0;
   font-size: 13px;
 }
 
