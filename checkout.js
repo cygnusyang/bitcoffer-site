@@ -26,6 +26,10 @@
     return;
   }
 
+  window.addEventListener("error", (event) => {
+    if (!status.textContent && event && event.message) say(fallback + "<br><small>" + event.message + "</small>");
+  });
+
   let initialized = false;
   let attempts = 0;
 
@@ -62,12 +66,17 @@
     if (!initialized) { say(fallback); return; }
     window.kTrack?.("buy_click", { p: "checkout" });
     try {
-      window.Paddle.Checkout.open({
+      const opening = window.Paddle.Checkout.open({
         items: [{ priceId: settings.priceId, quantity: 1 }],
         settings: { showAddDiscounts: false },
       });
+      if (opening && typeof opening.then === "function") {
+        opening.then(() => sayText("")).catch((error) => {
+          say(fallback + "<br><small>" + (error && error.message ? error.message : String(error)) + "</small>");
+        });
+      }
     } catch (error) {
-      say(fallback);
+      say(fallback + "<br><small>" + (error && error.message ? error.message : String(error)) + "</small>");
     }
   });
 
