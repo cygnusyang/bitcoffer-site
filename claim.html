@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-site="bitcoffer" data-page="bitcoffer-claim">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Get your Bitcoffer licence</title>
+<link rel="canonical" href="https://bitcoffer.cygnusyang.top/claim">
+<style>
+  :root { color-scheme: light dark; --line: rgba(127,127,127,.28); }
+  body { margin: 0 auto; max-width: 720px; padding: 48px 24px 96px;
+         font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", sans-serif; }
+  h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -.01em; }
+  h2 { font-size: 19px; margin: 38px 0 8px; }
+  .meta { color: #888; font-size: 14px; margin: 0 0 28px; }
+  .card { border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; margin: 0 0 28px; }
+  .button { display: inline-block; border: 0; border-radius: 10px; padding: 12px 20px;
+            background: #0b6154; color: #fff; font: inherit; font-weight: 600; font-size: 16px; cursor: pointer; }
+  .button[disabled] { opacity: .5; cursor: not-allowed; }
+  .button.secondary { background: transparent; color: inherit; border: 1px solid var(--line); font-weight: 500; }
+  label { display: block; font-size: 14px; font-weight: 600; margin: 0 0 6px; }
+  input { width: 100%; box-sizing: border-box; padding: 10px 12px; font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+          border: 1px solid var(--line); border-radius: 9px; background: transparent; color: inherit; }
+  input:focus { outline: 2px solid #0b6154; outline-offset: 1px; }
+  .hint { font-size: 13px; color: #888; margin: 8px 0 0; }
+  #status { margin: 14px 0 0; font-size: 14px; min-height: 1.2em; color: #888; }
+  #result { display: none; }
+  #result pre { margin: 14px 0 10px; padding: 14px 16px; background: rgba(127,127,127,.12); border-radius: 9px;
+                font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.6;
+                white-space: pre-wrap; word-break: break-all; user-select: all; }
+  ol { padding-left: 22px; }
+  li { margin: 6px 0; }
+  a { color: #0b6154; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 44px 0; }
+  .lang { font-size: 14px; margin: 0 0 8px; }
+</style>
+<script src="theme.js"></script>
+<script src="analytics.js" defer></script>
+<link rel="icon" href="/assets/app-icon.png">
+</head>
+<body>
+<p class="lang"><a href="claim-zh" lang="zh-Hans">中文</a> · <a href="/">← Back to bitcoffer.cygnusyang.top</a></p>
+
+<h1>Get your Bitcoffer licence</h1>
+<p class="meta">Paste the machine fingerprint from Bitcoffer and your device-bound serial appears right away.</p>
+
+<div class="card" id="claim-card">
+  <label for="fingerprint">Machine fingerprint</label>
+  <input id="fingerprint" type="text" inputmode="latin" autocomplete="off" autocapitalize="off"
+         spellcheck="false" maxlength="32" placeholder="32 characters, e.g. 6f1c…">
+  <p class="hint">In Bitcoffer open <strong>Settings → Licence → Machine fingerprint</strong> and press <strong>Copy</strong>. The serial is emailed to the address you paid with as well.</p>
+  <p><button class="button" id="claim" type="button">Get my serial</button></p>
+  <p id="status" role="status"></p>
+</div>
+
+<div class="card" id="result" role="region" aria-live="polite">
+  <label>Your serial</label>
+  <pre id="serial"></pre>
+  <p id="serial-meta" class="hint"></p>
+  <p>
+    <button class="button secondary" id="copy" type="button">Copy serial</button>
+  </p>
+  <p class="hint">Open Bitcoffer → Settings → Licence, paste the serial, press Activate. Keep this page or the email: the same link re-issues this serial if you reinstall macOS, and issues one for a second Mac.</p>
+</div>
+
+<hr>
+
+<h2>Lost the email?</h2>
+<div class="card">
+  <label for="email">The address you paid with</label>
+  <input id="email" type="email" autocomplete="email" spellcheck="false" placeholder="you@example.com">
+  <p><button class="button secondary" id="resend" type="button">Email me my licence again</button></p>
+  <p id="resend-status" role="status" class="hint"></p>
+</div>
+
+<h2>Where the fingerprint comes from</h2>
+<ol>
+  <li>Install Bitcoffer (the 30-day trial needs no licence).</li>
+  <li>Open <strong>Settings → Licence</strong>.</li>
+  <li>Copy the value under <strong>Machine fingerprint</strong>. It is 32 letters and numbers.</li>
+</ol>
+<p>Nothing works? Write to <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence">ruohuyang@163.com</a> from the address you paid with and include your Paddle transaction ID.</p>
+
+<script src="claim-settings.js" defer></script>
+<script src="claim.js" defer></script>
+</body>
+</html>
