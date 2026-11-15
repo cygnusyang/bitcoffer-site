@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-site="bitcoffer" data-page="bitcoffer-checkout">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Subscribe to Bitcoffer — US$9.99/year</title>
+<link rel="canonical" href="https://bitcoffer.cygnusyang.top/checkout">
+<style>
+  :root { color-scheme: light dark; --line: rgba(127,127,127,.28); }
+  body { margin: 0 auto; max-width: 720px; padding: 48px 24px 96px;
+         font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", sans-serif; }
+  h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -.01em; }
+  h2 { font-size: 19px; margin: 38px 0 8px; }
+  .meta { color: #888; font-size: 14px; margin: 0 0 28px; }
+  .card { border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; margin: 0 0 28px; }
+  .price { font-size: 30px; font-weight: 650; margin: 0 0 6px; }
+  .price span { font-size: 15px; font-weight: 400; color: #888; }
+  .button { display: inline-block; border: 0; border-radius: 10px; padding: 13px 22px;
+            background: #0b6154; color: #fff; font: inherit; font-weight: 600; font-size: 16px; cursor: pointer; }
+  .button[disabled] { opacity: .5; cursor: not-allowed; }
+  #checkout-status { margin: 14px 0 0; font-size: 14px; color: #888; min-height: 1.2em; }
+  ol { padding-left: 22px; }
+  li { margin: 6px 0; }
+  a { color: #0b6154; }
+  code { font-size: 14px; background: rgba(127,127,127,.15); padding: 1px 4px; border-radius: 3px; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 44px 0; }
+  .lang { font-size: 14px; margin: 0 0 8px; }
+  .links { font-size: 13px; color: #888; margin-top: 14px; }
+</style>
+<script src="theme.js"></script>
+<script src="analytics.js" defer></script>
+<link rel="icon" href="/assets/app-icon.png">
+</head>
+<body>
+<p class="lang"><a href="checkout-zh" lang="zh-Hans">中文</a> · <a href="/">← Back to bitcoffer.cygnusyang.top</a></p>
+
+<h1>Subscribe to Bitcoffer</h1>
+<p class="meta">Direct-download licence · US$9.99 per year · covers two Macs</p>
+
+<div class="card">
+  <p class="price">US$9.99<span> / year, renews annually</span></p>
+  <p>An annual licence for the direct download of Bitcoffer. Payment is handled by Paddle, who is the seller of record: they work out and remit any sales tax or VAT, and the final total is shown before you pay.</p>
+  <p><button class="button" id="buy" type="button" disabled>Continue to Paddle checkout</button></p>
+  <p id="checkout-status" role="status">Loading checkout…</p>
+  <p class="links">By subscribing you agree to the <a href="https://ai.cygnusyang.top/terms">terms of sale</a>, the <a href="refund">refund policy</a> and the <a href="privacy">privacy policy</a>.</p>
+</div>
+
+<h2>What happens after you pay</h2>
+<ol>
+  <li>Paddle emails you a receipt with a transaction ID.</li>
+  <li>Open Bitcoffer → Settings → Licence and copy the <strong>machine fingerprint</strong> shown there.</li>
+  <li>Email both — the fingerprint and the Paddle transaction ID — to <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence%20fulfilment">ruohuyang@163.com</a>, from the address you paid with.</li>
+  <li>You get a device-bound activation serial for that Mac. Licences are issued by hand, so allow up to one business day.</li>
+</ol>
+<p>Not in a hurry? The <a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">30-day trial</a> covers the direct download in full, and the <a href="https://apps.apple.com/app/id6829253572?mt=12">Mac App Store</a> version subscribes through Apple instead.</p>
+
+<hr>
+
+<h2 lang="zh-Hans">中文说明</h2>
+<div lang="zh-Hans">
+  <p>直装版按年授权：US$9.99／年，可激活两台 Mac。付款由 Paddle 处理（Paddle 是交易卖方，负责计算并申报销售税／增值税，付款前会显示含税总价）。</p>
+  <p>付款后：Paddle 会给你一封带交易编号的收据；在 Bitcoffer 的「设置 → 许可」里复制<strong>本机指纹</strong>；用付款邮箱把指纹与交易编号发到 <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence%20fulfilment">ruohuyang@163.com</a>，即可获得绑定该设备的激活序列号。序列号是人工签发的，通常一个工作日内发出。</p>
+  <p>不着急的话，<a href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest">直装版</a>可以先免费试用 30 天；<a href="https://apps.apple.com/cn/app/id6829253572?mt=12">Mac App Store 版</a>走 Apple 的内购订阅。</p>
+</div>
+
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js" defer></script>
+<script src="checkout-settings.js" defer></script>
+<script src="checkout.js" defer></script>
+</body>
+</html>

@@ -42,4 +42,22 @@
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bitcoffer.cygnusyang.top/privacy-zh"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bitcoffer.cygnusyang.top/privacy"/>
   </url>
+  <url>
+    <loc>https://bitcoffer.cygnusyang.top/refund</loc>
+    <lastmod>2026-11-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bitcoffer.cygnusyang.top/refund"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bitcoffer.cygnusyang.top/refund-zh"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bitcoffer.cygnusyang.top/refund"/>
+  </url>
+  <url>
+    <loc>https://bitcoffer.cygnusyang.top/refund-zh</loc>
+    <lastmod>2026-11-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bitcoffer.cygnusyang.top/refund"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bitcoffer.cygnusyang.top/refund-zh"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bitcoffer.cygnusyang.top/refund"/>
+  </url>
 </urlset>

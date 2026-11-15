@@ -20,8 +20,10 @@ Last updated 2026-11-15. Current public release: v2.22.0 (2026-11-14). No claims
 
 ## Pricing
 
-- **USD 9.99 per year**, auto-renewable annual subscription. In the Mac App Store the app is a free download and the subscription is an in-app purchase billed by Apple (with a one-month introductory free trial); Apple is the seller of record for that channel, and cancellation is handled in the buyer's Apple ID settings.
-- Direct-download buyers get a device-bound annual serial licence covering two Macs, after a 30-day trial.
+- **USD 9.99 per year**, auto-renewable annual subscription, covering two Macs.
+- **Direct download**: buy on the site at <https://bitcoffer.cygnusyang.top/checkout>. Paddle is the merchant of record and processes the payment, so it calculates and remits sales tax/VAT and shows the final total before payment. After paying, the buyer emails the app's machine fingerprint plus the Paddle transaction ID to receive a device-bound activation serial (issued by hand, usually within one business day).
+- **Mac App Store**: the app is a free download and the subscription is an in-app purchase billed by Apple, with a one-month introductory free trial.
+- Refunds: 14 days from a charge, no questions asked — <https://bitcoffer.cygnusyang.top/refund>.
 - If the subscription or licence lapses, the app still opens and the vault stays readable and exportable; data is not deleted.
 - Licensing questions: ruohuyang@163.com.
 
@@ -36,6 +38,8 @@ Last updated 2026-11-15. Current public release: v2.22.0 (2026-11-14). No claims
 - Home (English): <https://bitcoffer.cygnusyang.top/>
 - Home (简体中文): <https://bitcoffer.cygnusyang.top/zh>
 - Mac App Store listing: <https://apps.apple.com/app/id6829253572>
+- Checkout: <https://bitcoffer.cygnusyang.top/checkout>
+- Refund policy: <https://bitcoffer.cygnusyang.top/refund>
 - Migration guide (中文): <https://bitcoffer.cygnusyang.top/guides/migrate.html>
 - Privacy policy (English): <https://bitcoffer.cygnusyang.top/privacy>
 - 隐私政策(中文) : <https://bitcoffer.cygnusyang.top/privacy-zh>
