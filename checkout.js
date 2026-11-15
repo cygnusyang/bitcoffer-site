@@ -1,7 +1,10 @@
 // Bitcoffer direct-download checkout — opens Paddle's overlay for one annual price.
 //
-// Failure discipline: every dead end explains itself and offers the email route,
-// because a silent disabled button is worse than a manual sale.
+// Two rules learned the hard way:
+//   · Wait for Paddle.js to be really ready (poll), otherwise Initialize queues
+//     against a stub and Checkout.open silently does nothing.
+//   · Never leave a dead end: config missing, domain unapproved or an error inside
+//     the overlay all fall back to the email route with an explanation.
 (() => {
   const settings = window.bitcofferCheckout;
   const button = document.getElementById("buy");
@@ -12,11 +15,7 @@
   const say = (html) => { status.innerHTML = html; };
   const sayText = (text) => { status.textContent = text; };
 
-  if (!settings || !window.Paddle) {
-    say(fallback);
-    return;
-  }
-  if (!/^pri_[a-z0-9]{26}$/.test(settings.priceId || "")) {
+  if (!settings || !/^pri_[a-z0-9]{26}$/.test(settings.priceId || "")) {
     say(fallback);
     return;
   }
@@ -27,34 +26,50 @@
     return;
   }
 
-  try {
-    if (sandbox) window.Paddle.Environment.set("sandbox");
-    window.Paddle.Initialize({
-      token: settings.clientToken,
-      eventCallback(event) {
-        if (event.name === "checkout.loaded") sayText("");
-        if (event.name === "checkout.error") say(fallback);
-        if (event.name === "checkout.warning") sayText("Paddle reported a warning; check the receipt before paying again.");
-        if (event.name === "checkout.completed") {
-          say('Payment received. Paddle has emailed your receipt — now send the machine fingerprint from Bitcoffer&rsquo;s licence settings, plus the transaction ID, to <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence%20fulfilment">ruohuyang@163.com</a>.');
-          button.disabled = true;
-          button.textContent = "Paid — see the steps above";
-        }
-      },
-    });
-  } catch (error) {
-    say(fallback);
-    return;
+  let initialized = false;
+  let attempts = 0;
+
+  function initialise() {
+    if (!window.Paddle || typeof window.Paddle.Initialize !== "function") {
+      if (attempts++ < 60) { setTimeout(initialise, 100); return; }
+      say(fallback);
+      return;
+    }
+    try {
+      if (sandbox) window.Paddle.Environment.set("sandbox");
+      window.Paddle.Initialize({
+        token: settings.clientToken,
+        eventCallback(event) {
+          if (event.name === "checkout.loaded") sayText("");
+          if (event.name === "checkout.error") say(fallback);
+          if (event.name === "checkout.warning") sayText("Paddle reported a warning; check the receipt before paying again.");
+          if (event.name === "checkout.completed") {
+            say('Payment received. Paddle has emailed your receipt — now send the machine fingerprint from Bitcoffer&rsquo;s licence settings, plus the transaction ID, to <a href="mailto:ruohuyang@163.com?subject=Bitcoffer%20licence%20fulfilment">ruohuyang@163.com</a>.');
+            button.disabled = true;
+            button.textContent = "Paid — see the steps above";
+          }
+        },
+      });
+      initialized = true;
+      sayText(sandbox ? "Paddle sandbox checkout. Use test payment details." : "");
+      button.disabled = false;
+    } catch (error) {
+      say(fallback);
+    }
   }
 
-  sayText(sandbox ? "Paddle sandbox checkout. Use test payment details." : "");
-  button.disabled = false;
   button.addEventListener("click", () => {
+    if (!initialized) { say(fallback); return; }
     window.kTrack?.("buy_click", { p: "checkout" });
     try {
-      window.Paddle.Checkout.open({ items: [{ priceId: settings.priceId, quantity: 1 }] });
+      window.Paddle.Checkout.open({
+        items: [{ priceId: settings.priceId, quantity: 1 }],
+        settings: { showAddDiscounts: false },
+      });
     } catch (error) {
       say(fallback);
     }
   });
+
+  initialise();
 })();
