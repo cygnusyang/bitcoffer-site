@@ -64,6 +64,7 @@
 
   button.addEventListener("click", () => {
     if (!initialized) { say(fallback); return; }
+    sayText("DEBUG: click handler ran");
     window.kTrack?.("buy_click", { p: "checkout" });
     try {
       const opening = window.Paddle.Checkout.open({
