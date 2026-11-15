@@ -26,10 +26,6 @@
     return;
   }
 
-  window.addEventListener("error", (event) => {
-    if (!status.textContent && event && event.message) say(fallback + "<br><small>" + event.message + "</small>");
-  });
-
   let initialized = false;
   let attempts = 0;
 
@@ -64,7 +60,6 @@
 
   button.addEventListener("click", () => {
     if (!initialized) { say(fallback); return; }
-    sayText("DEBUG: click handler ran");
     window.kTrack?.("buy_click", { p: "checkout" });
     try {
       const opening = window.Paddle.Checkout.open({
