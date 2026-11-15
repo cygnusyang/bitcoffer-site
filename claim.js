@@ -24,6 +24,26 @@
 
   const FINGERPRINT = /^[0-9a-f]{32}$/;
 
+  // 端点有两个：首选 pages.dev 上的转发入口（中国大陆可达，workers.dev 按 SNI 被
+  // 阻断），转发层自身故障时退回直连 Worker。只有「连不上」才换下一个——HTTP 4xx/5xx
+  // 是上游真的答了话，换端点只是重放一次同样的错。
+  async function postLicence(path, payload) {
+    const endpoints = [settings?.endpoint, settings?.fallbackEndpoint].filter(Boolean);
+    let lastError;
+    for (const base of endpoints) {
+      try {
+        return await fetch(`${base}${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    throw lastError || new Error("no endpoint configured");
+  }
+
   function token() {
     const match = location.hash.match(/[#&]t=([A-Za-z0-9_-]{20,64})/);
     return match ? match[1] : "";
@@ -77,11 +97,7 @@
     claimButton.disabled = true;
     setStatus(pick("Issuing your serial…", "正在签发序列号…"));
     try {
-      const response = await fetch(`${settings.endpoint}/claim`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: current, fingerprint: raw }),
-      });
+      const response = await postLicence("/claim", { token: current, fingerprint: raw });
       const body = await response.json().catch(() => ({}));
       if (!response.ok || !body.ok) {
         const reason = REASONS[body.code];
@@ -130,11 +146,7 @@
     resendButton.disabled = true;
     resendStatus.textContent = pick("Sending…", "正在发送…");
     try {
-      const response = await fetch(`${settings.endpoint}/resend`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const response = await postLicence("/resend", { email });
       const body = await response.json().catch(() => ({}));
       resendStatus.textContent =
         response.status === 429
