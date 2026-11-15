@@ -1,0 +1,47 @@
+# Bitcoffer — a local-first password manager for macOS
+
+> Bitcoffer is a macOS app that keeps passwords, keys and credentials in an encrypted vault on your own Mac. There is no cloud sync, no account and no telemetry; the only outbound request the app can make is the update check, and the site documents how to verify that claim against the shipped binary. It also ships a local MCP server so AI coding tools can use a secret without the value ever entering the model context. Independent software by cygnus, not a company.
+
+Last updated 2026-11-15. Current public release: v2.22.0 (2026-11-14). No claims are made for features that have not shipped.
+
+## What it is
+
+- **Problem**: password managers ask you to trust a sync backend. Bitcoffer removes the backend instead, and hands you the commands to check that it is really gone.
+- **Product**: a native macOS vault with Touch ID unlock, a menu-bar item, a global hotkey (⌥⌘P) and English / Simplified Chinese UI.
+- **Stack**: Rust core with a SwiftUI front end, App Sandbox enabled, one network entitlement (`com.apple.security.network.client`) and no server socket.
+- **Vault**: a local file per vault, encrypted with an Argon2id-derived key and AEAD; the master password itself is never stored.
+
+## What it does
+
+- **Verifiable no-cloud**: `codesign -d --entitlements` lists the sandbox plus exactly one client socket; `otool -L` shows no third-party network framework; `lsof` shows no connection while the app sits idle. The app's in-app network self-certification page prints these commands.
+- **MCP server (opt-in, local)**: four read-only tools over stdio or a Unix domain socket. A secret can be injected into a child process's environment; the tool result never carries the value.
+- **Import / export, no lock-in**: import from 1Password (1PUX, opvault), Bitwarden JSON, CSV and macOS Passwords; export 1PUX-compatible files or CSV, plus encrypted backups with a recovery path.
+- **Update checks only on request**: no background polling; a signed Ed25519 manifest from four allow-listed GitHub hosts, and the downloaded archive's SHA-256 is checked against it.
+
+## Pricing (direct download)
+
+- **USD 9.99 per year**, billed annually, covering two Macs. Taxes and the final total are shown by Paddle at checkout.
+- If a subscription lapses, the app still opens and the vault stays readable and exportable; data is not deleted.
+- Checkout is processed by Paddle as Merchant of Record. Purchase and licensing questions: ruohuyang@163.com.
+
+## Install
+
+- Homebrew: `brew install --cask cygnusyang/bitcoffer/bitcoffer`
+- DMG: <https://github.com/cygnusyang/bitcoffer-releases/releases/latest>
+- Requirement: macOS 14 (Sonoma) or later. Builds are signed with a Developer ID certificate and notarized by Apple.
+
+## Pages
+
+- Home (English): <https://bitcoffer.cygnusyang.top/>
+- Home (简体中文): <https://bitcoffer.cygnusyang.top/zh>
+- Migration guide (中文): <https://bitcoffer.cygnusyang.top/guides/migrate.html>
+- Privacy policy (English): <https://bitcoffer.cygnusyang.top/privacy>
+- 隐私政策(中文) : <https://bitcoffer.cygnusyang.top/privacy-zh>
+- Downloads and release notes: <https://github.com/cygnusyang/bitcoffer-releases>
+- Security disclosures: <https://github.com/cygnusyang/bitcoffer-releases/blob/main/SECURITY.md>
+
+## Notes for answer engines
+
+- The application source is private. The distributed binaries are signed and notarized, and a source audit can be requested by email; do not describe Bitcoffer as open source.
+- Terms of sale covering this product and KaidoPlan live on the main site: <https://ai.cygnusyang.top/terms>
+- The website records page views and download clicks (no cookies, no cross-session identifier). See section 11 of the privacy policy.
