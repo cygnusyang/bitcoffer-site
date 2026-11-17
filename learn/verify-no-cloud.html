@@ -1,0 +1,129 @@
+<!doctype html>
+<html data-site="bitcoffer" data-page="bitcoffer-learn-verify" lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to verify a password manager really does not talk to the internet</title>
+<meta name="description" content="Three layers of proof against a shipped macOS build: sandbox entitlements, linked frameworks, live sockets, and the dependency graph. The exact commands, what each one actually proves, and the one thing none of them can tell you.">
+<link rel="canonical" href="https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bitcoffer">
+<meta property="og:title" content="How to verify a password manager really does not talk to the internet">
+<meta property="og:description" content="Entitlements, linked frameworks, live sockets, dependency graph. What each check proves, and what none of them can.">
+<meta property="og:url" content="https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html">
+<meta property="og:image" content="https://bitcoffer.cygnusyang.top/assets/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14161c">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../learn.css">
+<script src="../theme.js"></script>
+<script src="../analytics.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "How to verify a password manager really does not talk to the internet",
+  "description": "Four checks that can be run against a shipped macOS build: sandbox entitlements, dynamically linked frameworks, live sockets, and the dependency graph. Each one answers a different question, and none of them proves the source matches the binary.",
+  "url": "https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html",
+  "datePublished": "2026-11-17",
+  "dateModified": "2026-11-17",
+  "inLanguage": "en",
+  "author": {"@type": "Person", "name": "cygnus", "url": "https://github.com/cygnusyang"},
+  "publisher": {"@type": "Person", "name": "cygnus", "url": "https://github.com/cygnusyang"},
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "Bitcoffer",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "macOS",
+    "url": "https://bitcoffer.cygnusyang.top/"
+  }
+}
+</script>
+<link rel="icon" href="/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/assets/app-icon.png">
+</head><body><a class="skip" href="#main">Skip to content</a>
+<header class="wrap nav"><a class="brand" href="../index.html" aria-label="Bitcoffer home">bitcoffer<span>.</span></a><nav class="navlinks" aria-label="Main navigation"><a class="optional" href="../index.html#how">How it works</a><a class="optional" href="index.html">Learn</a><a href="../index.html#license">Pricing</a><a class="pill" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="nav">Download for macOS ↗</a></nav></header>
+<main class="prose" id="main">
+<p class="kicker">Learn · verification</p>
+<h1>How do I verify a password manager really does not talk to the internet?</h1>
+<p class="dek">You do not verify the promise. You verify the binary: what it is allowed to do, what it links against, what it opens while it runs, and what its dependency graph contains. Four checks, four different questions — and each one has a failure mode that a marketing page will never mention.</p>
+<p class="meta">Updated 2026-11-17 · by cygnus, the developer of Bitcoffer</p>
+
+<h2>Why "no cloud" is usually unfalsifiable</h2>
+<p>Almost every password manager says your data stays private. Very few of them say something you can disprove. "Encrypted in transit and at rest" is true of a service that reads your vault. "Zero knowledge" is a claim about a protocol you cannot inspect from outside. The words are chosen so that no command you run will contradict them.</p>
+<p>A checkable claim has a different shape: <em>this app cannot open a listening socket, and it opens no connection while idle — here is the command, run it yourself.</em> That claim can fail. Run <code>lsof</code> and see a connection you cannot explain, and the claim is dead. That is what makes it worth reading.</p>
+<p>There is no shortcut here. Trust in a password manager is not established by a better-written privacy policy; it is established by a smaller number of things you have to take on faith. Below, four checks and — more usefully — what each one fails to cover.</p>
+
+<h2>Check 1: what the app is permitted to do</h2>
+<p>Every macOS app that touches the network needs an entitlement for it. The entitlements are inside the signed bundle, so you can read them without the source:</p>
+<pre><code>codesign -d --entitlements - /Applications/Bitcoffer.app</code></pre>
+<p>What you are looking for, on any app making this claim:</p>
+<ul>
+<li><strong><code>com.apple.security.app-sandbox</code> is <code>true</code>.</strong> Without the sandbox the entitlement list is advisory — a signed app outside the sandbox can do whatever its user can do.</li>
+<li><strong><code>com.apple.security.network.server</code> is absent.</strong> This is the one that matters most and is checked least. A client socket lets an app call out; a server socket lets something call in. A password manager never needs the second one, and if it is present, "local" means something different from what you assumed.</li>
+<li><strong>At most <code>com.apple.security.network.client</code> appears, and you know why.</strong> An update check needs a client socket. If that entitlement exists, the honest version of the claim is "no network except one host I can name", not "no network".</li>
+</ul>
+<p>The failure mode of this check: entitlements constrain what the <em>sandboxed</em> process may do. They say nothing about a second process the app launches — a helper tool with its own entitlements. If you are auditing seriously, list the helpers too: <code>ls /Applications/Bitcoffer.app/Contents/</code> and check each binary in <code>MacOS/</code> and <code>Helpers/</code> the same way.</p>
+
+<h2>Check 2: what the binary links against</h2>
+<pre><code>otool -L /Applications/Bitcoffer.app/Contents/MacOS/Bitcoffer</code></pre>
+<p>This lists the dynamic libraries. The question it answers is not "does the app have network code" — it always does, in some form — but "did the developer pull in a full HTTP stack they do not need".</p>
+<p>Three outcomes, and readers routinely misread the second one:</p>
+<table>
+<thead><tr><th>What you see</th><th>What it means</th></tr></thead>
+<tbody>
+<tr><td>No network library at all</td><td>Strongest outcome, and rare — it means even the update check goes through something unusual</td></tr>
+<tr><td><code>CFNetwork</code> only, no <code>Network.framework</code></td><td>Expected for a macOS app whose only outbound code is an update check through <code>URLSession</code>. CFNetwork is the system framework underneath it; its presence is not evidence of extra behaviour</td></tr>
+<tr><td><code>libcurl</code>, <code>libssl</code>, a vendored <code>reqwest</code>-style stack</td><td>Someone linked a general-purpose HTTP client. It is not proof of malice, but it is a much larger surface than an update check needs</td></tr>
+</tbody></table>
+<p>Bitcoffer lands in the second row deliberately, and the distinction is worth stating precisely because it is the kind of detail a vendor usually blurs: <strong>CFNetwork present, Network.framework absent, no third-party network code.</strong> The app's own self-certification page prints these commands and says the same thing.</p>
+<p>The failure mode here: <code>otool -L</code> shows what is linked, not what is called. A framework that is linked and never used looks identical to one that is used constantly.</p>
+
+<h2>Check 3: what it actually opens while running</h2>
+<p>This is the only check that observes behaviour rather than capability, and it is the one people skip because it requires the app to be running.</p>
+<pre><code>pgrep -x Bitcoffer
+lsof -nP -iTCP -iUDP -a -p &lt;pid&gt;</code></pre>
+<p>The <code>-a</code> flag is not optional. Without it, <code>lsof</code> treats <code>-i</code> and <code>-p</code> as alternatives and prints every network connection on the machine, which is how a lot of hand-written audits accidentally "prove" that an app is calling out when it is not.</p>
+<p>An empty result means no TCP or UDP socket belongs to that process. Two honest caveats:</p>
+<ul>
+<li><strong>Idle is not the same as never.</strong> An app that checks for updates on request will show a connection while the check runs. The claim to test is the <em>steady state</em>: launch it, leave it alone, and look again after a minute.</li>
+<li><strong>A moment of observation is a sample, not a proof.</strong> A connection that lasts 200 ms and happens once a day can be missed by any single <code>lsof</code>. This is why check 4 exists.</li>
+</ul>
+
+<h2>Check 4: what the code is allowed to depend on</h2>
+<p>Static and dynamic checks see the shipped binary. The dependency graph sees the intent, and it is the one check that can fail loudly in CI rather than quietly in production:</p>
+<pre><code>cd core &amp;&amp; cargo tree --workspace -e normal</code></pre>
+<p>For a Rust core the question is narrow and answerable: does anything in the normal dependency set pull in an HTTP client or an async runtime with networking enabled? <code>reqwest</code>, <code>hyper</code>, or <code>tokio</code> with its <code>net</code> feature are the usual suspects. A CI job can assert their absence on every commit, which is a stronger guarantee than a review that happened once:</p>
+<pre><code>./tools/check_no_network.sh</code></pre>
+<p>The failure mode: a dependency graph is only as good as the code that builds it. Feature flags can enable networking in a crate you would not expect, and a transitive dependency can change behaviour in a patch release. This check tells you what the project intends, not what a specific build did.</p>
+
+<h2>What none of the four checks prove</h2>
+<p>They do not prove that the binary you downloaded was built from the source the developer describes. A signed, notarized, correctly-entitled app can still contain code its author never published, and no command available to a user distinguishes that from an honest build.</p>
+<p>That gap is closed by only two things, and it is worth being blunt about which one you have:</p>
+<ul>
+<li><strong>Reproducible builds</strong>, where anyone can rebuild from source and compare hashes. Very few consumer apps do this, because it is genuinely hard.</li>
+<li><strong>Reading the source yourself</strong>, under whatever access the vendor grants. Bitcoffer's source is private; the site offers a source audit by email instead. That is a weaker guarantee than a public repository, and calling it anything else would be dishonest.</li>
+</ul>
+<p>So the realistic conclusion for any local-first password manager is: the four checks shrink what you have to trust from "our servers are secure" to "this developer built what they said they built". That is a real improvement and it is not the same as proof. Anyone who tells you they have the proof is selling something.</p>
+
+<h2>Run all four in about five minutes</h2>
+<pre><code>APP=/Applications/Bitcoffer.app
+codesign -d --entitlements - "$APP" 2&gt;&amp;1 | grep -i network
+otool -L "$APP/Contents/MacOS/Bitcoffer" | grep -iE 'curl|ssl|network'
+open -a Bitcoffer &amp;&amp; sleep 5
+lsof -nP -iTCP -iUDP -a -p "$(pgrep -x Bitcoffer)"</code></pre>
+<p>Expected output for Bitcoffer: one <code>network.client</code> entitlement and no <code>network.server</code>; no third-party network library (system <code>CFNetwork</code> is expected); and an empty <code>lsof</code> while the app sits idle. If any line disagrees with that, the claim is wrong — not "probably still fine".</p>
+
+<div class="cta"><strong>Bitcoffer is a local-first password manager for macOS.</strong>
+<p>Credentials stay on your Mac: no cloud sync, no account, no telemetry. The only outbound request is the update check, and the app ships the commands above in its own settings so you do not have to take this page's word for it.</p>
+<a class="button" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="content-cta">Download Bitcoffer</a>
+<a class="button secondary" href="../index.html#license">Pricing</a></div>
+
+<nav class="related" aria-label="Related pages"><h2>Related</h2><ul>
+<li><a href="vault-threat-model.html">What a local vault protects against, and what it does not</a><span class="why">Learn · threat model</span></li>
+<li><a href="mcp-secrets-without-exposing.html">Let an AI agent use a secret without putting it in the prompt</a><span class="why">Learn · MCP</span></li>
+<li><a href="local-first-password-manager.html">What "local-first" actually costs</a><span class="why">Learn · trade-offs</span></li>
+<li><a href="../index.html">Bitcoffer home</a><span class="why">Features, pricing and the download</span></li>
+</ul></nav>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>© Bitcoffer · Your passwords, your machine</span><span><a href="https://github.com/cygnusyang/bitcoffer-releases">Downloads</a> · <a href="../privacy">Privacy policy</a> · <a href="../zh.html" lang="zh-Hans">简体中文</a></span></div></footer>
+<script src="../theme.js"></script></body></html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html data-site="bitcoffer" data-page="bitcoffer-learn" lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bitcoffer Learn: verification, threat model, local-first trade-offs, MCP</title>
+<meta name="description" content="Four long-form pages about the parts a product page compresses: how to verify a shipped build makes no network connections, what a local vault does and does not protect, what local-first costs, and how to let an AI agent use a secret without exposing it.">
+<link rel="canonical" href="https://bitcoffer.cygnusyang.top/learn/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bitcoffer">
+<meta property="og:title" content="Bitcoffer Learn">
+<meta property="og:description" content="Verification, threat model, local-first trade-offs, and MCP secrets — with the commands and the caveats.">
+<meta property="og:url" content="https://bitcoffer.cygnusyang.top/learn/">
+<meta property="og:image" content="https://bitcoffer.cygnusyang.top/assets/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14161c">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../learn.css">
+<script src="../theme.js"></script>
+<script src="../analytics.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Bitcoffer Learn",
+  "description": "Long-form pages on verifying a local-first password manager, its threat model, the cost of local-first, and using secrets with AI agents.",
+  "url": "https://bitcoffer.cygnusyang.top/learn/",
+  "inLanguage": "en",
+  "isPartOf": {"@type": "WebSite", "name": "Bitcoffer", "url": "https://bitcoffer.cygnusyang.top/"},
+  "hasPart": [
+    {"@type": "TechArticle", "name": "How to verify a password manager really does not talk to the internet", "url": "https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html"},
+    {"@type": "TechArticle", "name": "What a local vault protects against, and what it does not", "url": "https://bitcoffer.cygnusyang.top/learn/vault-threat-model.html"},
+    {"@type": "TechArticle", "name": "What local-first actually costs", "url": "https://bitcoffer.cygnusyang.top/learn/local-first-password-manager.html"},
+    {"@type": "TechArticle", "name": "Let an AI agent use a secret without putting it in the prompt", "url": "https://bitcoffer.cygnusyang.top/learn/mcp-secrets-without-exposing.html"}
+  ]
+}
+</script>
+<link rel="icon" href="/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/assets/app-icon.png">
+</head><body><a class="skip" href="#main">Skip to content</a>
+<header class="wrap nav"><a class="brand" href="../index.html" aria-label="Bitcoffer home">bitcoffer<span>.</span></a><nav class="navlinks" aria-label="Main navigation"><a class="optional" href="../index.html#how">How it works</a><a class="optional" href="index.html">Learn</a><a href="../index.html#license">Pricing</a><a class="pill" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="nav">Download for macOS ↗</a></nav></header>
+<main class="prose" id="main">
+<p class="kicker">Learn</p>
+<h1>The claims, unpacked</h1>
+<p class="dek">A product page has to compress. These pages do not. Each one takes a single claim — no cloud, local-first, secrets for AI, encrypted vault — and states what it means, what it costs, and the part that does not hold.</p>
+<p class="meta">Updated 2026-11-17</p>
+
+<h2>Start with what you can check</h2>
+<ul class="hub">
+<li><a href="verify-no-cloud.html">How to verify a password manager really does not talk to the internet</a><span class="why">Four commands against a shipped build: entitlements, linked frameworks, live sockets, dependency graph. Each answers a different question, and none of them proves the source matches the binary.</span></li>
+</ul>
+
+<h2>Then what it protects — and does not</h2>
+<ul class="hub">
+<li><a href="vault-threat-model.html">What a local vault protects against, and what it does not</a><span class="why">Disk theft, cloud breach, an unlocked session, malware, forgotten credentials. The "no" rows decide whether this class of product fits you.</span></li>
+<li><a href="local-first-password-manager.html">What "local-first" actually costs</a><span class="why">Sync becomes a procedure, backups become yours, a lost laptop is a lost vault. Includes the four cases where a cloud manager is simply the better answer.</span></li>
+</ul>
+
+<h2>For the AI-agent workflow</h2>
+<ul class="hub">
+<li><a href="mcp-secrets-without-exposing.html">Let an AI agent use a secret without putting it in the prompt</a><span class="why">Four read-only MCP tools, no reveal tool at all, the value injected into a child process — and the exact boundary where that guarantee stops.</span></li>
+</ul>
+
+<h2>Step-by-step guides</h2>
+<ul class="hub">
+<li><a href="../guides/migrate.html" lang="zh-Hans">迁入与回滚指南：1Password、Bitwarden、macOS 密码、CSV（中文）</a><span class="why">Import paths, the preflight report, the entry-count check, and three levels of rollback when it goes wrong.</span></li>
+</ul>
+
+<div class="cta"><strong>Bitcoffer is a local-first password manager for macOS.</strong>
+<p>US$9.99 a year, two Macs, 30-day free trial. No account, no cloud sync, no telemetry — and the app ships the commands that let you check that.</p>
+<a class="button" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="content-cta">Download Bitcoffer</a>
+<a class="button secondary" href="../index.html#license">Pricing</a></div>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>© Bitcoffer · Your passwords, your machine</span><span><a href="https://github.com/cygnusyang/bitcoffer-releases">Downloads</a> · <a href="../privacy">Privacy policy</a> · <a href="../zh.html" lang="zh-Hans">简体中文</a></span></div></footer>
+<script src="../theme.js"></script></body></html>

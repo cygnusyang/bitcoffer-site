@@ -116,3 +116,7 @@ section.pricing {
     flex-basis: 100%;
   }
 }
+
+/* 首页技术钩子：指向 learn/ 长文的内链 */
+.section-head .micro a{color:var(--accent-dark);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.section-head .micro a:hover{color:var(--purple)}

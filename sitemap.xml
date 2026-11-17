@@ -25,6 +25,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://bitcoffer.cygnusyang.top/learn/</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bitcoffer.cygnusyang.top/learn/vault-threat-model.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bitcoffer.cygnusyang.top/learn/local-first-password-manager.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bitcoffer.cygnusyang.top/learn/mcp-secrets-without-exposing.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://bitcoffer.cygnusyang.top/privacy</loc>
     <lastmod>2026-11-15</lastmod>
     <changefreq>yearly</changefreq>

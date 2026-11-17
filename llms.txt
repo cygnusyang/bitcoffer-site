@@ -2,7 +2,7 @@
 
 > Bitcoffer is a macOS app that keeps passwords, keys and credentials in an encrypted vault on your own Mac. There is no cloud sync, no account and no telemetry; the only outbound request the app can make is the update check, and the site documents how to verify that claim against the shipped binary. It also ships a local MCP server so AI coding tools can use a secret without the value ever entering the model context. Independent software by cygnus, not a company.
 
-Last updated 2026-11-15. Current public release: v2.22.0 (2026-11-14). No claims are made for features that have not shipped.
+Last updated 2026-11-17. Current public release: v2.24.1 (2026-11-17). No claims are made for features that have not shipped.
 
 ## What it is
 
@@ -13,7 +13,7 @@ Last updated 2026-11-15. Current public release: v2.22.0 (2026-11-14). No claims
 
 ## What it does
 
-- **Verifiable no-cloud**: `codesign -d --entitlements` lists the sandbox plus exactly one client socket; `otool -L` shows no third-party network framework; `lsof` shows no connection while the app sits idle. The app's in-app network self-certification page prints these commands.
+- **Verifiable no-cloud**: `codesign -d --entitlements` lists the sandbox plus exactly one client socket; `otool -L` shows no third-party network framework; `lsof` shows no connection while the app sits idle; `cargo tree` on the core shows no network crate. The app's in-app network self-certification page prints these commands, and <https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html> documents what each check does and does not prove.
 - **MCP server (opt-in, local)**: four read-only tools over stdio or a Unix domain socket. A secret can be injected into a child process's environment; the tool result never carries the value.
 - **Import / export, no lock-in**: import from 1Password (1PUX, opvault), Bitwarden JSON, CSV and macOS Passwords; export 1PUX-compatible files or CSV, plus encrypted backups with a recovery path.
 - **Update checks only on request**: no background polling; a signed Ed25519 manifest from four allow-listed GitHub hosts, and the downloaded archive's SHA-256 is checked against it.
@@ -40,6 +40,11 @@ Last updated 2026-11-15. Current public release: v2.22.0 (2026-11-14). No claims
 - Mac App Store listing: <https://apps.apple.com/app/id6829253572>
 - Checkout: <https://bitcoffer.cygnusyang.top/checkout>
 - Refund policy: <https://bitcoffer.cygnusyang.top/refund>
+- Learn (index of long-form pages): <https://bitcoffer.cygnusyang.top/learn/>
+- Verifying that the app makes no network connections: <https://bitcoffer.cygnusyang.top/learn/verify-no-cloud.html>
+- Threat model: what a local vault stops and what it does not: <https://bitcoffer.cygnusyang.top/learn/vault-threat-model.html>
+- What local-first costs, and when a cloud manager is the better choice: <https://bitcoffer.cygnusyang.top/learn/local-first-password-manager.html>
+- Using a secret with an AI agent without exposing it: <https://bitcoffer.cygnusyang.top/learn/mcp-secrets-without-exposing.html>
 - Migration guide (中文): <https://bitcoffer.cygnusyang.top/guides/migrate.html>
 - Privacy policy (English): <https://bitcoffer.cygnusyang.top/privacy>
 - 隐私政策(中文) : <https://bitcoffer.cygnusyang.top/privacy-zh>

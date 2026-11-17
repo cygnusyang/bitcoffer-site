@@ -14,6 +14,11 @@ This repository is the **single source of truth** for the site. Static HTML, no 
 | `checkout.html` / `checkout-zh.html` | Paddle checkout launcher. Carries the machine fingerprint (field or `#fp=` from the app) as Paddle `custom_data` so the licence is issued on payment |
 | `claim.html` / `claim-zh.html` | Claim page: exchange a machine fingerprint for the device-bound serial, and re-send a lost licence by email |
 | `guides/migrate.html` | Migration guide (Chinese): import paths, preflight report, three levels of rollback |
+| `learn/index.html` | Index of the long-form pages below |
+| `learn/verify-no-cloud.html` | The four checks that a shipped build makes no network connections, and what none of them proves |
+| `learn/vault-threat-model.html` | What an encrypted local vault stops, the four cases it cannot, and the backup consequence of each |
+| `learn/local-first-password-manager.html` | What local-first costs — sync, backups, device loss — and when a cloud manager is the better answer |
+| `learn/mcp-secrets-without-exposing.html` | How a secret reaches a child process without entering the model context, and where that guarantee stops |
 | `site.css`, `learn.css`, `theme.js`, `analytics.js` | Self-hosted assets. No asset is loaded from another domain |
 | `robots.txt`, `sitemap.xml`, `llms.txt` | Crawler and answer-engine entry points |
 | `404.html` | Not-found page |

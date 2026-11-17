@@ -1,0 +1,122 @@
+<!doctype html>
+<html data-site="bitcoffer" data-page="bitcoffer-learn-threat" lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What a local vault protects against, and what it does not</title>
+<meta name="description" content="A threat model honest enough to be useful: what an encrypted local vault stops, the four cases it cannot, and why the backup plan is decided by the threat you are actually worried about rather than by the one in the brochure.">
+<link rel="canonical" href="https://bitcoffer.cygnusyang.top/learn/vault-threat-model.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bitcoffer">
+<meta property="og:title" content="What a local vault protects against, and what it does not">
+<meta property="og:description" content="What an encrypted local vault stops, the four cases it cannot, and how that decides your backup plan.">
+<meta property="og:url" content="https://bitcoffer.cygnusyang.top/learn/vault-threat-model.html">
+<meta property="og:image" content="https://bitcoffer.cygnusyang.top/assets/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14161c">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../learn.css">
+<script src="../theme.js"></script>
+<script src="../analytics.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "What a local vault protects against, and what it does not",
+  "description": "A threat model for an encrypted local password vault: disk theft and offline attack, cloud breach, an unlocked session, malware, physical access, and forgotten credentials — with the backup consequence of each.",
+  "url": "https://bitcoffer.cygnusyang.top/learn/vault-threat-model.html",
+  "datePublished": "2026-11-17",
+  "dateModified": "2026-11-17",
+  "inLanguage": "en",
+  "author": {"@type": "Person", "name": "cygnus", "url": "https://github.com/cygnusyang"},
+  "publisher": {"@type": "Person", "name": "cygnus", "url": "https://github.com/cygnusyang"},
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "Bitcoffer",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "macOS",
+    "url": "https://bitcoffer.cygnusyang.top/"
+  }
+}
+</script>
+<link rel="icon" href="/assets/app-icon.png">
+<link rel="apple-touch-icon" href="/assets/app-icon.png">
+</head><body><a class="skip" href="#main">Skip to content</a>
+<header class="wrap nav"><a class="brand" href="../index.html" aria-label="Bitcoffer home">bitcoffer<span>.</span></a><nav class="navlinks" aria-label="Main navigation"><a class="optional" href="../index.html#how">How it works</a><a class="optional" href="index.html">Learn</a><a href="../index.html#license">Pricing</a><a class="pill" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="nav">Download for macOS ↗</a></nav></header>
+<main class="prose" id="main">
+<p class="kicker">Learn · threat model</p>
+<h1>What does a local vault protect against, and what does it not?</h1>
+<p class="dek">It protects the data at rest: a stolen disk, a copied file, a backup on the wrong drive. It does not protect an unlocked session, a machine running malware as you, or you forgetting the one thing you cannot reset. Written down because a security page that lists only the first column is a sales page.</p>
+<p class="meta">Updated 2026-11-17 · by cygnus, the developer of Bitcoffer</p>
+
+<h2>The threat table</h2>
+<table>
+<thead><tr><th>Threat</th><th>Stopped?</th><th>By what</th></tr></thead>
+<tbody>
+<tr><td>Disk or laptop stolen while the app is closed</td><td>Yes</td><td>The vault file is ciphertext; the key needs your master password, stretched with Argon2id</td></tr>
+<tr><td>Vault file copied to another machine</td><td>Yes, if the copy cannot guess the password</td><td>Same as above — the file is not bound to a device</td></tr>
+<tr><td>Vendor's server breached</td><td>Not applicable</td><td>There is no server holding your vault</td></tr>
+<tr><td>Vendor shut down, acquired, or changed their terms</td><td>Not applicable</td><td>Your file, your machine, your key</td></tr>
+<tr><td>Malware running as you, while the vault is unlocked</td><td>No</td><td>—</td></tr>
+<tr><td>Someone at your unlocked Mac</td><td>Partly</td><td>Touch ID and re-prompt on sensitive screens; not a defence against a person who has your session</td></tr>
+<tr><td>Physical access plus your master password</td><td>No</td><td>—</td></tr>
+<tr><td>You forget the password and lose the recovery code</td><td>No, by design</td><td>No escrow exists to undo it</td></tr>
+</tbody></table>
+<p>Read the "no" rows first. They decide whether this class of product fits you, and no vendor can move them with better copy.</p>
+
+<h2>How the at-rest protection actually works</h2>
+<p>Four layers, and the design choices in each one explain the limits in the table above:</p>
+<ol>
+<li><strong>Key derivation: Argon2id.</strong> The master password is stretched with a memory-hard function, so guessing is expensive in RAM as well as time. The parameters live in the vault header, which means a vault can be re-keyed with stronger settings later without the file format changing.</li>
+<li><strong>Encryption: AEAD.</strong> The vault body is sealed with an authenticated cipher (XChaCha20-Poly1305), so a modified file fails to open rather than opening to garbage. Bitcoffer routes all sealing through a single crypto entry point rather than letting each module pick its own.</li>
+<li><strong>The master password is not stored.</strong> There is no verifier to steal and no "hint" field. A wrong password is simply a key that produces an authentication failure.</li>
+<li><strong>Recovery is a wrapped key, not a backdoor.</strong> A recovery code derives a separate key that wraps the vault's data key with AES-256-GCM. That is why recovery works without the password, and why losing both is unrecoverable: the code <em>is</em> the second key, not a request to a support desk.</li>
+</ol>
+<p>What this adds up to: an attacker with your disk gets a file that costs real money to attack, and an attacker who also gets your recovery code gets everything. Both statements are load-bearing.</p>
+
+<h2>The four cases it cannot cover</h2>
+<h3>1. An unlocked session</h3>
+<p>Once you unlock, the data key is in memory and the app will decrypt on request. Anything that can ask the app — a script, a malicious binary, a compromised editor plugin running as you — can get what it asks for. Touch ID shortens the window; it does not close it. This is the boundary every local password manager shares, and any claim to have solved it deserves hard evidence before you believe it.</p>
+
+<h3>2. Malware that targets the clipboard or the screen</h3>
+<p>Copy a password, and it is in the clipboard where any process can read it. Look at a password while someone records the screen and it is in a video. A vault protects storage; it cannot protect a value after you have deliberately exposed it to the system.</p>
+
+<h3>3. Physical access with cooperation</h3>
+<p>If someone has your machine and can make you unlock it, encryption is not the relevant control. The relevant control is that the vault is not the only copy of anything you cannot afford to lose — see the next section.</p>
+
+<h3>4. Forgotten credentials with no recovery code</h3>
+<p>This is the failure that actually happens most often, and it is a design choice rather than a flaw. A vendor who can reset your password can also be compelled to, and can also be breached. Choose which risk you want; do not expect both.</p>
+
+<h2>Why this decides your backup plan</h2>
+<p>The threat you are actually worried about tells you what to back up, where to put it, and how often — and doing it the other way round produces a backup that protects against the wrong thing:</p>
+<table>
+<thead><tr><th>If your real worry is…</th><th>Then…</th></tr></thead>
+<tbody>
+<tr><td>Device theft or disk failure</td><td>An encrypted backup kept off the machine, restored once to prove it works</td></tr>
+<tr><td>Ransomware or malware on your Mac</td><td>A backup the malware cannot reach — offline or on a different account, not a folder the same process can encrypt</td></tr>
+<tr><td>Forgetting the master password</td><td>A recovery code stored somewhere you can still reach if the Mac is gone</td></tr>
+<tr><td>Accidentally deleting an item</td><td>Versioned backups with a retention window, not a single overwritable copy</td></tr>
+</tbody></table>
+<p>Notice that three of those four require the backup to live somewhere other than the vault's own directory. A backup inside the same folder as the vault is a second copy, not a backup.</p>
+
+<h2>The claim you can check, and the one you cannot</h2>
+<p>Two different assertions get bundled together in security marketing, and separating them is most of the value of a threat model:</p>
+<ul>
+<li><strong>Checkable:</strong> the app cannot open a server socket, opens no connection while idle, and links no third-party network code. <a href="verify-no-cloud.html">Four commands</a>, five minutes, and the result is either consistent or it is not.</li>
+<li><strong>Not checkable by you:</strong> that the binary was built from the source the developer describes. No user-accessible command answers that. Bitcoffer's source is private, and the site offers a source audit by email instead — weaker than a public repository, and worth saying so plainly.</li>
+</ul>
+<p>A threat model that does not draw that line is not a threat model. It is reassurance, and reassurance is what you get from the products that need it most.</p>
+
+<div class="cta"><strong>Bitcoffer is a local-first password manager for macOS.</strong>
+<p>An Argon2id-derived key, an AEAD-sealed vault, a recovery code you hold, and no server anywhere in the path. US$9.99 a year, two Macs, 30-day trial.</p>
+<a class="button" href="https://github.com/cygnusyang/bitcoffer-releases/releases/latest" data-track="download_click" data-track-page="content-cta">Download Bitcoffer</a>
+<a class="button secondary" href="../index.html#license">Pricing</a></div>
+
+<nav class="related" aria-label="Related pages"><h2>Related</h2><ul>
+<li><a href="local-first-password-manager.html">What "local-first" actually costs</a><span class="why">Learn · trade-offs</span></li>
+<li><a href="verify-no-cloud.html">How to verify a password manager really does not talk to the internet</a><span class="why">Learn · verification</span></li>
+<li><a href="mcp-secrets-without-exposing.html">Let an AI agent use a secret without putting it in the prompt</a><span class="why">Learn · MCP</span></li>
+<li><a href="../privacy">Privacy policy</a><span class="why">What is stored where, including the update check</span></li>
+</ul></nav>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>© Bitcoffer · Your passwords, your machine</span><span><a href="https://github.com/cygnusyang/bitcoffer-releases">Downloads</a> · <a href="../privacy">Privacy policy</a> · <a href="../zh.html" lang="zh-Hans">简体中文</a></span></div></footer>
+<script src="../theme.js"></script></body></html>
