@@ -21,7 +21,7 @@ Last updated 2026-11-17. Current public release: v2.24.1 (2026-11-17). No claims
 ## Pricing
 
 - **USD 9.99 per year**, auto-renewable annual subscription, covering two Macs.
-- **Direct download**: buy on the site at <https://bitcoffer.cygnusyang.top/checkout>. Paddle is the merchant of record and processes the payment, so it calculates and remits sales tax/VAT and shows the final total before payment. After paying, the buyer emails the app's machine fingerprint plus the Paddle transaction ID to receive a device-bound activation serial (issued by hand, usually within one business day).
+- **Direct download**: buy on the site at <https://bitcoffer.cygnusyang.top/checkout>. Paddle is the merchant of record and processes the payment, so it calculates and remits sales tax/VAT and shows the final total before payment. After paying, the buyer enters the app's machine fingerprint plus the Paddle transaction ID on the site, and the device-bound activation serial is emailed automatically — no waiting for a human.
 - **Mac App Store**: the app is a free download and the subscription is an in-app purchase billed by Apple, with a one-month introductory free trial.
 - Refunds: 14 days from a charge, no questions asked — <https://bitcoffer.cygnusyang.top/refund>.
 - If the subscription or licence lapses, the app still opens and the vault stays readable and exportable; data is not deleted.
